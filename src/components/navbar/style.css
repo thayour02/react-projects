@@ -1,0 +1,10 @@
+
+
+
+.tree-view-container{
+    background-color: rgb(0, 71, 111);
+    min-height: 700px;
+    min-width: auto;
+    line-height: 50px;
+    font-size: 30px
+}
