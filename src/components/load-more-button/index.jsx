@@ -9,6 +9,7 @@ export default function LoadMoreData(limit= 20) {
     const [count, setCount] = useState(0)
     const [errorMsg, setErrorMsg] = useState(null)
     const [disableButton, setDisableButton] = useState(false)
+    const [scroll, setScroll] = useState(0)
 
     async function fetchProducts(products) {
         try {
@@ -37,6 +38,27 @@ export default function LoadMoreData(limit= 20) {
         if(products && products.length === 194) setDisableButton(true)
     },[products])
 
+    function handleScroll(){
+        console.log(document.body.scrollTop, document.documentElement.scrollTop, document.documentElement.scrollHeight,document.documentElement.clientHeight)
+
+
+        const howMuchScrolled = document.body.scrollTop || 
+        document.documentElement.scrollTop;
+
+        const height = document.documentElement.scrollHeight -
+         document.documentElement.clientHeight;
+
+
+         setScroll((howMuchScrolled/height)*100)
+    }
+
+    useEffect(()=>{
+        window.addEventListener('scroll', handleScroll)
+        return()=>{
+            window.removeEventListener('scroll', ()=>{})
+        }
+    },[])
+
     if(loading){
         return <div>Loading Products ! Please Wait</div>
     }
@@ -44,7 +66,13 @@ export default function LoadMoreData(limit= 20) {
         return <div>Error loading Products {errorMsg.message}</div>
         
     }
-    return <div className="load-container">
+    return <div>
+        <div className="top-container">
+            <h1>Custom Scroll indicator</h1>
+            <div className="scroll-tracking"></div>
+            <div className="current-bar" style={{width:`${scroll}%`}}></div>
+        </div>
+        <div className="load-container">
             <div className="product-Container">
                 {products && products.length ? 
                     products.map((Item)=>(
@@ -65,4 +93,6 @@ export default function LoadMoreData(limit= 20) {
                 </div>
             
     </div>
+    </div>
+    
 }
